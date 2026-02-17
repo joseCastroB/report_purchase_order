@@ -1,0 +1,290 @@
+<t t-name="purchase.report_purchaseorder_document">
+    <t t-call="web.basic_layout">
+        <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+        
+        <div class="page" style="font-size: 11px; font-family: Arial, sans-serif; color: #000;">
+            
+            <style>
+                .nam-header { background-color: #E0E0E0; font-weight: bold; text-align: center; padding: 2px; border-bottom: 1px solid #000; color: #000;}
+                .nam-title { font-size: 16px; font-weight: bold; color: #003366; text-align: center; margin: 5px 0;}
+                .nam-logo { max-height: 80px; }
+                .table-nam { width: 100%; border-collapse: collapse; margin-top: 5px;}
+                .table-nam th { border: 1px solid #000; padding: 4px; background-color: #E0E0E0; text-align: center; font-weight: bold;}
+                .table-nam td { border: 1px solid #000; padding: 4px; vertical-align: middle;}
+                .table-clean { width: 100%; }
+                .table-clean td { padding: 1px; vertical-align: top;}
+            </style>
+
+            <div class="row mb-2">
+                <div class="col-12 text-center">
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" class="nam-logo" alt="Logo"/>
+                </div>
+            </div>
+
+            <div class="row m-0" style="border: 2px solid #000;">
+                <div class="col-12 text-center nam-border p-1">
+                    <div class="nam-title">
+                        ORDEN DE COMPRA N° NAM <span t-field="o.name"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-0" style="border: 2px solid #000; border-top: none;">
+                <div class="col-5 p-0" style="border-right: 2px solid #000;">
+                    <div class="nam-header">
+                        <span t-field="o.company_id.name"/>
+                    </div>
+                    <div class="p-2 text-center">
+                        <strong>R.U.C.: </strong> <span t-field="o.company_id.vat"/><br/>
+                        <span t-field="o.company_id.street"/> / <span t-field="o.company_id.city"/><br/>
+                        <t t-if="o.company_id.phone">Tel. <span t-field="o.company_id.phone"/> Cel. <span t-field="o.company_id.mobile"/></t>
+                        <br/><br/>
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 40px;" alt="Logo"/>
+                    </div>
+                </div>
+
+                <div class="col-7 p-0">
+                    <div class="nam-header">PROVEEDOR</div>
+                    <div class="p-2">
+                        <t t-set="contact_person" t-value="o.partner_id.child_ids[0] if o.partner_id.child_ids else False"/>
+                        
+                        <table class="table-clean">
+                            <tr>
+                                <td style="width:30%;"><strong>Fecha de O/C:</strong></td>
+                                <td><span t-field="o.date_order" t-options="{&quot;widget&quot;: &quot;date&quot;}"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>RUC:</strong></td>
+                                <td><span t-field="o.partner_id.vat"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Razón Social:</strong></td>
+                                <td><span t-field="o.partner_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dirección:</strong></td>
+                                <td>
+                                    <span t-field="o.partner_id.street"/> 
+                                    <span t-if="o.partner_id.street2">, <span t-field="o.partner_id.street2"/></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Contacto:</strong></td>
+                                <td>
+                                    <t t-if="contact_person">
+                                        <span t-field="contact_person.name"/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Telf/Correo:</strong></td>
+                                <td>
+                                    <span t-field="o.partner_id.phone"/> 
+                                    <t t-if="o.partner_id.email"> // <span t-field="o.partner_id.email"/></t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Moneda:</strong></td>
+                                <td><span t-field="o.currency_id.name"/></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Banco:</strong></td>
+                                <td><span t-field="o.partner_id.nam_entidad_bancaria"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>CTA. CTE. (S/.):</strong></td>
+                                <td><span t-field="o.partner_id.nam_cta_cte"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>CCI (S/.):</strong></td>
+                                <td><span t-field="o.partner_id.nam_cci"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>CTA. CTE. (USD):</strong></td>
+                                <td><span t-field="o.partner_id.nam_cta_cte_usd"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>CCI (USD):</strong></td>
+                                <td><span t-field="o.partner_id.nam_cci_usd"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cta. Detracciones:</strong></td>
+                                <td><span t-field="o.partner_id.nam_cta_detracciones"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-0" style="border: 2px solid #000; border-top: none;">
+                <div class="col-5 p-2" style="border-right: 2px solid #000;">
+                     
+                     <t t-set="contact_person_bottom" t-value="o.partner_id.child_ids[0] if o.partner_id.child_ids else False"/>
+
+                     <table class="table-clean">
+                        <tr>
+                            <td style="width:25%; vertical-align: middle;"><strong>Para:</strong></td>
+                            <td style="vertical-align: middle;">
+                                <t t-if="o.partner_id.image_1920">
+                                    <img t-att-src="image_data_uri(o.partner_id.image_1920)" style="max-height: 40px; margin-right: 5px; vertical-align: middle;" alt="Partner Logo"/>
+                                </t>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Atención:</strong></td>
+                            
+                            <td>
+                                    <t t-if="contact_person"><span t-field="contact_person.name"/></t>
+                                    <t t-else=""><span t-field="o.partner_id.name"/></t>
+                            </td>
+                    
+                        </tr>
+                        <tr>
+                            <td><strong>De:</strong></td>
+                            <td><span t-field="o.create_uid.name"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-7 p-0">
+                    <div class="nam-header">CONDICIONES</div>
+                    <div class="p-2">
+                        <table class="table-clean">
+                            <tr>
+                                <td style="width:40%;"><strong>Condición de pago:</strong></td>
+                                <td><span t-field="o.payment_term_id.note"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Plazo de entrega:</strong></td>
+                                <td><span t-field="o.delivery_term"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lugar de entrega:</strong></td>
+                                <td><span t-field="o.delivery_place"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dirección:</strong></td>
+                                <td><span t-field="o.delivery_address"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+
+            <table class="table-nam">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">Item</th>
+                        <th style="width: 8%;">Cant.</th>
+                        <th>Descripción</th>
+                        <th style="width: 15%;">P. Unitario</th>
+                        <th style="width: 15%;">P. Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="item_count" t-value="1"/>
+                    <t t-foreach="o.order_line" t-as="line">
+                        <tr>
+                            <td class="text-center"><span t-esc="item_count"/></td>
+                            <td class="text-center">
+                                <span t-esc="'%.0f' % line.product_qty"/>
+                            </td>
+                            <td>
+                                <span t-field="line.name"/>
+                            </td>
+                            <td class="text-end">
+                                <span t-field="line.price_unit" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                            <td class="text-end">
+                                <span t-field="line.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                        </tr>
+                        <t t-set="item_count" t-value="item_count + 1"/>
+                    </t>
+                </tbody>
+            </table>
+
+            <div class="row justify-content-end mt-0">
+                <div class="col-5">
+                    <table class="table-clean" style="margin-top: 5px;">
+                        <tr>
+                            <td class="text-end" style="padding-right: 10px;">Subtotal:</td>
+                            <td class="text-end" style="border: 1px solid #000; width: 40%;">
+                                <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-end" style="padding-right: 10px;">IGV:</td>
+                            <td class="text-end" style="border: 1px solid #000;">
+                                <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-end" style="padding-right: 10px;"><strong>Total:</strong></td>
+                            <td class="text-end" style="border: 1px solid #000; font-weight: bold;">
+                                <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="mt-4" t-if="o.notes" style="border: 1px solid #000; padding: 5px; font-size: 10px;">
+                <strong>Observaciones:</strong> <span t-field="o.notes"/>
+            </div>
+
+            <div class="mt-2" style="border: 1px solid #000; padding: 5px; font-size: 9px; text-align: justify;">
+                <strong>CONDICIONES Y PENALIDADES</strong><br/><br/>
+
+                <strong>1. Penalidades por Incumplimiento de Plazo</strong><br/>
+                En caso de incumplimiento del plazo de entrega acordado, se aplicará una penalidad equivalente al 5% del valor total de la orden de compra por cada día calendario de retraso, hasta un máximo del 30% del valor total de la orden.<br/>
+                El proveedor deberá informar oportunamente cualquier circunstancia que pudiera afectar el cumplimiento del plazo establecido. El retraso injustificado será considerado causal de aplicación directa de las penalidades mencionadas, sin perjuicio de otras acciones que la parte compradora pueda adoptar conforme a ley.<br/>
+                National Air &amp; Motor Co podrá anular la orden de compra si el proveedor incumple el plazo de entrega indicado en la cotización enviada.<br/><br/>
+
+                <strong>2. Entrega de Informe Final (SERVICIOS)</strong><br/>
+                El proveedor deberá entregar un informe técnico final detallado en un plazo máximo de 2 días una vez culminados los trabajos. El informe deberá incluir:<br/>
+                &amp;bull; Actividades realizadas<br/>
+                &amp;bull; Condición final del equipo intervenido<br/>
+                &amp;bull; Recomendaciones técnicas (si las hubiera)<br/>
+                &amp;bull; Evidencias fotográficas antes, durante y después del proceso<br/>
+                &amp;bull; Listado de repuestos utilizados<br/>
+                La entrega de este informe es requisito indispensable para el cierre administrativo de la orden de compra y para el procesamiento del pago correspondiente.<br/><br/>
+
+                <strong>3. Uso de Repuestos Originales</strong><br/>
+                Todos los trabajos deberán ser ejecutados utilizando repuestos originales del fabricante del equipo (OEM) o, en su defecto, partes con calidad y especificaciones equivalentes debidamente certificadas.<br/>
+                Si fuera necesario utilizar repuestos alternativos, el proveedor deberá solicitar autorización expresa del comprador, presentando la documentación técnica que lo sustente.<br/>
+                El uso no autorizado de repuestos no originales será considerado como incumplimiento de las condiciones de la orden de compra.<br/>
+                El proveedor deberá realizar la devolución de los repuestos usados y rebobinados, en caso aplique.<br/><br/>
+
+                <strong>4. Período de Garantía</strong><br/>
+                Durante la vigencia del contrato y del período de garantía, NAM podrá notificar al proveedor si determina que los bienes son defectuosos o no cumplen con las condiciones del contrato.<br/>
+                Una vez recibida la notificación, el proveedor deberá remediar los defectos por su propia cuenta y costo, ya sea mediante reparación o reemplazo.<br/>
+                Si el proveedor no cumple, NAM podrá contratar a terceros para realizar la reparación o reemplazo, asumiendo el proveedor el costo correspondiente.<br/><br/>
+
+                <strong>5. Penalidades por Malas Evaluaciones</strong><br/>
+                Si el proveedor obtiene una evaluación de desempeño calificada como “Deficiente” o “No conforme”, se aplicarán las siguientes penalidades:<br/>
+                &amp;bull; Penalidad equivalente al 5% del valor total de la orden de compra o contrato por cada evento de mala evaluación.<br/>
+                &amp;bull; Si se producen dos (2) o más evaluaciones deficientes en el mismo servicio o entrega, el cliente podrá resolver unilateralmente el contrato o cancelar la orden de compra sin responsabilidad adicional, reservándose el derecho de exigir indemnización por daños y perjuicios.<br/><br/>
+
+                <strong>6. Conformidad y Aceptación Implícita</strong><br/>
+                La ausencia de objeciones expresas a los términos establecidos dentro de los tres (3) días hábiles posteriores al envío de la orden de compra será interpretada como aceptación tácita de todas las condiciones y cláusulas.<br/>
+                Esta aceptación implica la efectividad inmediata de la orden de compra, comprometiéndose el proveedor a su cumplimiento en los plazos y condiciones acordadas.
+            </div>
+            <div style="display:none;" id="compatibility_fix_block">
+                <t t-if="o.dest_address_id">
+                    <div t-field="o.dest_address_id"/>
+                </t>
+                <div t-if="o.user_id" t-field="o.user_id"/>
+                <div t-if="o.partner_ref" t-field="o.partner_ref"/>
+                <div t-if="o.date_order" t-field="o.date_order"/>
+                <div t-if="o.date_planned">
+                    <p t-field="o.date_planned"/>
+                </div>
+            </div>
+        </div>
+    </t>
+</t>
