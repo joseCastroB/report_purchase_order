@@ -71,9 +71,7 @@
                             <tr>
                                 <td><strong>Contacto:</strong></td>
                                 <td>
-                                    <t t-if="contact_person">
-                                        <span t-field="contact_person.name"/>
-                                    </t>
+                                        <span t-field="o.partner_id.nam_contacto"/>
                                 </td>
                             </tr>
                             <tr>
@@ -136,8 +134,7 @@
                             <td><strong>Atención:</strong></td>
                             
                             <td>
-                                    <t t-if="contact_person"><span t-field="contact_person.name"/></t>
-                                    <t t-else=""><span t-field="o.partner_id.name"/></t>
+                                    <span t-field="o.partner_id.nam_contacto"/>
                             </td>
                     
                         </tr>
